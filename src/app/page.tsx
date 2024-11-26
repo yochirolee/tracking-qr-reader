@@ -20,7 +20,8 @@ export default function PackageScanner() {
 	const [packageStatus, setPackageStatus] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
 
-	const { ref } = useZxing({
+	const { ref, torch, stop } = useZxing({
+		paused: !scanning,
 		onDecodeResult(result) {
 			setScanning(false);
 			setResult(result.getText());
@@ -35,7 +36,12 @@ export default function PackageScanner() {
 	});
 
 	const startScanning = () => {
-		setScanning(true);
+		if (scanning) {
+			stop();
+			setScanning(false);
+		} else {
+			setScanning(true);
+		}
 		setResult(null);
 		setPackageStatus(null);
 		setError(null);
