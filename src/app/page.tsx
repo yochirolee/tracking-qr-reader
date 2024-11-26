@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { QrReader } from "react-qr-reader";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Package, QrCode, AlertCircle } from "lucide-react";
+import { useZxing } from "react-zxing";
 
 export default function PackageScanner() {
 	const [scanning, setScanning] = useState(false);
@@ -20,20 +20,19 @@ export default function PackageScanner() {
 	const [packageStatus, setPackageStatus] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
 
-	const handleScan = (data: string | null) => {
-		if (data) {
+	const { ref } = useZxing({
+		onDecodeResult(result) {
 			setScanning(false);
-			setResult(data);
+			setResult(result.getText());
 			const status = "Package found";
 			setPackageStatus(status);
 			setError(null);
-		}
-	};
-
-	const handleError = (err: Error) => {
-		setError("Error scanning code. Please try again.");
-		console.error(err);
-	};
+		},
+		onError(error) {
+			setError("Error scanning code. Please try again.");
+			console.error(error);
+		},
+	});
 
 	const startScanning = () => {
 		setScanning(true);
@@ -54,11 +53,7 @@ export default function PackageScanner() {
 			<CardContent>
 				{scanning ? (
 					<div className="aspect-square overflow-hidden rounded-lg">
-						<QrReader
-							onResult={(result) => result && handleScan(result.getText())}
-							onError={handleError}
-							constraints={{ facingMode: "environment" }}
-						/>
+						<video ref={ref} className="w-full h-full object-cover" />
 					</div>
 				) : (
 					<div className="aspect-square bg-muted flex items-center justify-center rounded-lg">
