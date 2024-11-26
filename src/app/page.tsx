@@ -24,7 +24,7 @@ export default function PackageScanner() {
 		if (data) {
 			setScanning(false);
 			setResult(data);
-			const status = false;
+			const status = "Package found";
 			setPackageStatus(status);
 			setError(null);
 		}
