@@ -24,12 +24,24 @@ export default function PackageScanner() {
 	const { ref, torch } = useZxing({
 		paused: !scanning,
 		onDecodeResult(result) {
-			setResult(result.getText());
+			const scannedCode = result.getText().split(",")[1];
+
+			// Check if package is already scanned
+			if (scannedPackages.includes(scannedCode)) {
+				setError("Package already scanned!");
+				// Will clear the error after 1.5 seconds
+				setTimeout(() => {
+					setError(null);
+				}, 1500);
+				return;
+			}
+
+			setResult(scannedCode);
 			const status = "Package found";
 			setPackageStatus(status);
 			setError(null);
-			setScannedPackages((prev) => [...prev, result.getText()]);
-			
+			setScannedPackages((prev) => [...prev, scannedCode]);
+
 			setTimeout(() => {
 				setResult(null);
 				setPackageStatus(null);
@@ -63,10 +75,26 @@ export default function PackageScanner() {
 						<div className="absolute inset-0 ">
 							<div className="absolute inset-0 flex items-center justify-center">
 								<div className="relative w-[70%] aspect-square ">
-									<div className="absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 border-primary"></div>
-									<div className="absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 border-primary"></div>
-									<div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-primary"></div>
-									<div className="absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 border-primary"></div>
+									<div
+										className={`absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 ${
+											error ? "border-red-500" : "border-primary"
+										}`}
+									></div>
+									<div
+										className={`absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 ${
+											error ? "border-red-500" : "border-primary"
+										}`}
+									></div>
+									<div
+										className={`absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 ${
+											error ? "border-red-500" : "border-primary"
+										}`}
+									></div>
+									<div
+										className={`absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 ${
+											error ? "border-red-500" : "border-primary"
+										}`}
+									></div>
 								</div>
 							</div>
 						</div>
