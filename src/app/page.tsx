@@ -53,7 +53,17 @@ export default function PackageScanner() {
 			</CardHeader>
 			<CardContent>
 				{scanning ? (
-					<div className="aspect-square overflow-hidden rounded-lg">
+					<div className="relative aspect-square overflow-hidden rounded-lg">
+						<div className="absolute inset-0 bg-black/50">
+							<div className="absolute inset-0 flex items-center justify-center">
+								<div className="relative w-[70%] aspect-square">
+									<div className="absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 border-primary"></div>
+									<div className="absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 border-primary"></div>
+									<div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-primary"></div>
+									<div className="absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 border-primary"></div>
+								</div>
+							</div>
+						</div>
 						<video ref={ref} className="w-full h-full object-cover" />
 					</div>
 				) : (
@@ -73,7 +83,7 @@ export default function PackageScanner() {
 						<Package className="h-4 w-4" />
 						<AlertTitle>Package Status</AlertTitle>
 						<AlertDescription>
-							Tracking number: {result}
+							Tracking number: {result.split(",")[1]}
 							<br />
 							Status: {packageStatus}
 						</AlertDescription>
