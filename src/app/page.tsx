@@ -30,6 +30,13 @@ export default function PackageScanner() {
 
 	const { ref, torch } = useZxing({
 		paused: !scanning,
+		constraints: {
+			video: {
+				facingMode: "environment",
+				width: 640,
+				height: 480,
+			},
+		},
 		onDecodeResult(result) {
 			const scannedCode = result.getText().split(",")[1];
 
@@ -83,22 +90,38 @@ export default function PackageScanner() {
 								<div className="relative w-[70%] aspect-square ">
 									<div
 										className={`absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 ${
-											error ? "border-red-500" : packageStatus ? "border-green-500" : "border-primary"
+											error
+												? "border-red-500"
+												: packageStatus
+												? "border-green-500"
+												: "border-primary"
 										}`}
 									></div>
 									<div
 										className={`absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 ${
-											error ? "border-red-500" : packageStatus ? "border-green-500" : "border-primary"
+											error
+												? "border-red-500"
+												: packageStatus
+												? "border-green-500"
+												: "border-primary"
 										}`}
 									></div>
 									<div
 										className={`absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 ${
-											error ? "border-red-500" : packageStatus ? "border-green-500" : "border-primary"
+											error
+												? "border-red-500"
+												: packageStatus
+												? "border-green-500"
+												: "border-primary"
 										}`}
 									></div>
 									<div
 										className={`absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 ${
-											error ? "border-red-500" : packageStatus ? "border-green-500" : "border-primary"
+											error
+												? "border-red-500"
+												: packageStatus
+												? "border-green-500"
+												: "border-primary"
 										}`}
 									></div>
 								</div>
@@ -118,7 +141,6 @@ export default function PackageScanner() {
 						<AlertDescription>{error}</AlertDescription>
 					</Alert>
 				)}
-				
 
 				{scannedPackages.length > 0 && (
 					<div className="mt-4">
