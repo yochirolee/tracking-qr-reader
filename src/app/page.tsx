@@ -13,6 +13,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Package, QrCode, AlertCircle } from "lucide-react";
 import { useZxing } from "react-zxing";
+import { Badge } from "@/components/ui/badge";
 
 export default function PackageScanner() {
 	const [scanning, setScanning] = useState(false);
@@ -123,12 +124,18 @@ export default function PackageScanner() {
 						</AlertDescription>
 					</Alert>
 				)}
+
 				{scannedPackages.length > 0 && (
 					<div className="mt-4">
-						<h3 className="text-lg font-semibold">Scanned Packages</h3>
-						<ul className="list-disc pl-5">
+						<div className="flex items-center justify-between">
+							<h3 className="text-lg font-semibold">Scanned Packages</h3>
+							<Badge variant="outline">{scannedPackages.length}</Badge>
+						</div>
+						<ul className="my-2">
 							{scannedPackages.map((pkg, index) => (
-								<li key={index}>{pkg}</li>
+								<li className=" border p-2 rounded-md" key={index}>
+									{pkg}
+								</li>
 							))}
 						</ul>
 					</div>
