@@ -22,6 +22,8 @@ export default function PackageScanner() {
 	const [error, setError] = useState<string | null>(null);
 	const [scannedPackages, setScannedPackages] = useState<string[]>([]);
 
+	const successSound = new Audio("/success-beep.mp3");
+
 	const { ref, torch } = useZxing({
 		paused: !scanning,
 		onDecodeResult(result) {
@@ -37,6 +39,7 @@ export default function PackageScanner() {
 				return;
 			}
 
+			successSound.play();
 			setResult(scannedCode);
 			const status = "Package found";
 			setPackageStatus(status);
@@ -78,22 +81,22 @@ export default function PackageScanner() {
 								<div className="relative w-[70%] aspect-square ">
 									<div
 										className={`absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 ${
-											error ? "border-red-500" : "border-primary"
+											error ? "border-red-500" : packageStatus ? "border-green-500" : "border-primary"
 										}`}
 									></div>
 									<div
 										className={`absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 ${
-											error ? "border-red-500" : "border-primary"
+											error ? "border-red-500" : packageStatus ? "border-green-500" : "border-primary"
 										}`}
 									></div>
 									<div
 										className={`absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 ${
-											error ? "border-red-500" : "border-primary"
+											error ? "border-red-500" : packageStatus ? "border-green-500" : "border-primary"
 										}`}
 									></div>
 									<div
 										className={`absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 ${
-											error ? "border-red-500" : "border-primary"
+											error ? "border-red-500" : packageStatus ? "border-green-500" : "border-primary"
 										}`}
 									></div>
 								</div>
@@ -113,17 +116,7 @@ export default function PackageScanner() {
 						<AlertDescription>{error}</AlertDescription>
 					</Alert>
 				)}
-				{result && packageStatus && (
-					<Alert className="mt-4">
-						<Package className="h-4 w-4" />
-						<AlertTitle>Package Status</AlertTitle>
-						<AlertDescription>
-							Tracking number: {result.split(",")[1]}
-							<br />
-							Status: {packageStatus}
-						</AlertDescription>
-					</Alert>
-				)}
+				
 
 				{scannedPackages.length > 0 && (
 					<div className="mt-4">
@@ -133,7 +126,7 @@ export default function PackageScanner() {
 						</div>
 						<ul className="my-2">
 							{scannedPackages.map((pkg, index) => (
-								<li className=" border p-2 rounded-md" key={index}>
+								<li className=" border p-2 my-1 rounded-md" key={index}>
 									{pkg}
 								</li>
 							))}
