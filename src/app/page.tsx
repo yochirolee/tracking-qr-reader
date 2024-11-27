@@ -19,15 +19,21 @@ export default function PackageScanner() {
 	const [result, setResult] = useState<string | null>(null);
 	const [packageStatus, setPackageStatus] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
+	const [scannedPackages, setScannedPackages] = useState<string[]>([]);
 
 	const { ref, torch } = useZxing({
 		paused: !scanning,
 		onDecodeResult(result) {
-			setScanning(false);
 			setResult(result.getText());
 			const status = "Package found";
 			setPackageStatus(status);
 			setError(null);
+			setScannedPackages((prev) => [...prev, result.getText()]);
+			
+			setTimeout(() => {
+				setResult(null);
+				setPackageStatus(null);
+			}, 1500);
 		},
 		onError(error) {
 			setError("Error scanning code. Please try again.");
@@ -54,9 +60,9 @@ export default function PackageScanner() {
 			<CardContent>
 				{scanning ? (
 					<div className="relative aspect-square overflow-hidden rounded-lg">
-						<div className="absolute inset-0 bg-black/50">
+						<div className="absolute inset-0 ">
 							<div className="absolute inset-0 flex items-center justify-center">
-								<div className="relative w-[70%] aspect-square">
+								<div className="relative w-[70%] aspect-square ">
 									<div className="absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 border-primary"></div>
 									<div className="absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 border-primary"></div>
 									<div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-primary"></div>
@@ -88,6 +94,16 @@ export default function PackageScanner() {
 							Status: {packageStatus}
 						</AlertDescription>
 					</Alert>
+				)}
+				{scannedPackages.length > 0 && (
+					<div className="mt-4">
+						<h3 className="text-lg font-semibold">Scanned Packages</h3>
+						<ul className="list-disc pl-5">
+							{scannedPackages.map((pkg, index) => (
+								<li key={index}>{pkg}</li>
+							))}
+						</ul>
+					</div>
 				)}
 			</CardContent>
 			<CardFooter>
