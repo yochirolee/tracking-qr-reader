@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -21,25 +21,27 @@ export default function PackageScanner() {
 	const [packageStatus, setPackageStatus] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const [scannedPackages, setScannedPackages] = useState<string[]>([]);
+	const [successSound, setSuccessSound] = useState<HTMLAudioElement | null>(null);
 
-	const successSound = new Audio("/success-beep.mp3");
+	// Initialize audio after component mounts
+	useEffect(() => {
+		setSuccessSound(new Audio("/success-beep.mp3"));
+	}, []);
 
 	const { ref, torch } = useZxing({
 		paused: !scanning,
 		onDecodeResult(result) {
 			const scannedCode = result.getText().split(",")[1];
 
-			// Check if package is already scanned
 			if (scannedPackages.includes(scannedCode)) {
 				setError("Package already scanned!");
-				// Will clear the error after 1.5 seconds
 				setTimeout(() => {
 					setError(null);
 				}, 1500);
 				return;
 			}
 
-			successSound.play();
+			successSound?.play();
 			setResult(scannedCode);
 			const status = "Package found";
 			setPackageStatus(status);
