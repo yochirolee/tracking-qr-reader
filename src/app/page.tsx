@@ -34,12 +34,13 @@ export default function PackageScanner() {
 		constraints: {
 			video: {
 				facingMode: "environment",
-				width: { ideal: 640, min: 360 },
-				height: { ideal: 480, min: 270 },
-				aspectRatio: 1.333333,
+				width: { ideal: 1920, min: 640 },
+				height: { ideal: 1080, min: 480 },
+				aspectRatio: 1.777777778,
+				
 			},
 		},
-		timeBetweenDecodingAttempts: 150,
+		timeBetweenDecodingAttempts: 200,
 		onDecodeResult(result) {
 			const scannedCode = result.getText().split(",")[1];
 
@@ -126,7 +127,7 @@ export default function PackageScanner() {
 			</CardHeader>
 			<CardContent>
 				{scanning ? (
-					<div className="aspect-square overflow-hidden h-48 mx-auto rounded-lg relative border-gray-300">
+					<div className="aspect-square overflow-hidden  mx-auto rounded-lg relative border-gray-300">
 						<video ref={ref} className="w-full h-full object-cover" onClick={triggerFocus} />
 						<div className="absolute p-4 inset-0 flex items-center justify-center pointer-events-none">
 							<div className="relative  w-36 h-36">
