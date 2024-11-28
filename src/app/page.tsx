@@ -33,12 +33,12 @@ export default function PackageScanner() {
 		constraints: {
 			video: {
 				facingMode: "environment",
-				width: { ideal: 640, min: 320 },
-				height: { ideal: 480, min: 240 },
-				aspectRatio: 1.333333333,
-				frameRate: { ideal: 15, max: 30 },
+				width: { ideal: 1280, min: 720 },
+				height: { ideal: 720, min: 480 },
+				aspectRatio: 1.777778,
 			},
 		},
+
 		onDecodeResult(result) {
 			const scannedCode = result.getText().split(",")[1];
 
@@ -75,6 +75,28 @@ export default function PackageScanner() {
 		setError(null);
 	};
 
+	const triggerFocus = async () => {
+		try {
+			if (ref.current) {
+				const track = ref.current.srcObject?.getTracks()[0];
+				if (track) {
+					const capabilities = track.getCapabilities();
+					if (capabilities.focusMode?.includes("continuous")) {
+						await track.applyConstraints({
+							advanced: [
+								{
+									focusMode: "continuous",
+								},
+							],
+						});
+					}
+				}
+			}
+		} catch (error) {
+			console.error("Error setting focus:", error);
+		}
+	};
+
 	return (
 		<Card className="w-full max-w-md mx-auto">
 			<CardHeader>
@@ -86,50 +108,15 @@ export default function PackageScanner() {
 			</CardHeader>
 			<CardContent>
 				{scanning ? (
-					<div className="relative aspect-square overflow-hidden rounded-lg">
-						<div className="absolute inset-0 ">
-							<div className="absolute inset-0 flex items-center justify-center">
-								<div className="relative w-[70%] aspect-square ">
-									<div
-										className={`absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 ${
-											error
-												? "border-red-500"
-												: packageStatus
-												? "border-green-500"
-												: "border-primary"
-										}`}
-									></div>
-									<div
-										className={`absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 ${
-											error
-												? "border-red-500"
-												: packageStatus
-												? "border-green-500"
-												: "border-primary"
-										}`}
-									></div>
-									<div
-										className={`absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 ${
-											error
-												? "border-red-500"
-												: packageStatus
-												? "border-green-500"
-												: "border-primary"
-										}`}
-									></div>
-									<div
-										className={`absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 ${
-											error
-												? "border-red-500"
-												: packageStatus
-												? "border-green-500"
-												: "border-primary"
-										}`}
-									></div>
+					<div className="relative">
+						<video ref={ref} className="w-full aspect-video rounded-lg" onClick={triggerFocus} />
+						<div className="absolute inset-0 pointer-events-none">
+							<div className="w-48 h-48 border-2 border-white/50 rounded-lg absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+								<div className="absolute inset-0 flex items-center justify-center">
+									<span className="text-xs text-white/75">Tap to focus</span>
 								</div>
 							</div>
 						</div>
-						<video ref={ref} className="w-full h-full object-cover" />
 					</div>
 				) : (
 					<div className="aspect-square bg-muted flex items-center justify-center rounded-lg">
