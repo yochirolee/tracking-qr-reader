@@ -111,12 +111,8 @@ export default function PackageScanner() {
 			</CardHeader>
 			<CardContent>
 				{scanning ? (
-					<div className="relative">
-						<video
-							ref={ref}
-							className="w-full h-40  aspect-square rounded-lg"
-							onClick={triggerFocus}
-						/>
+					<div className="aspect-square overflow-hidden rounded-lg  relative border-gray-300 ">
+						<video ref={ref} className="w-full h-full object-cover" onClick={triggerFocus} />
 						<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
 							<div className="relative w-64 h-24">
 								<div
@@ -172,7 +168,7 @@ export default function PackageScanner() {
 						</div>
 					</div>
 				) : (
-					<div className="aspect-square bg-muted h-40 w-full flex items-center justify-center rounded-lg">
+					<div className="aspect-square bg-muted  w-full flex items-center justify-center rounded-lg">
 						<QrCode className="w-16 h-16 text-muted-foreground" />
 					</div>
 				)}
