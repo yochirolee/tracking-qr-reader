@@ -11,7 +11,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Package, QrCode, AlertCircle } from "lucide-react";
+import { Package, QrCode, AlertCircle, Flashlight } from "lucide-react";
 import { useZxing } from "react-zxing";
 import { Badge } from "@/components/ui/badge";
 
@@ -22,6 +22,7 @@ export default function PackageScanner() {
 	const [error, setError] = useState<string | null>(null);
 	const [scannedPackages, setScannedPackages] = useState<string[]>([]);
 	const [successSound, setSuccessSound] = useState<HTMLAudioElement | null>(null);
+	const [torchEnabled, setTorchEnabled] = useState(false);
 
 	// Initialize audio after component mounts
 	useEffect(() => {
@@ -33,12 +34,11 @@ export default function PackageScanner() {
 		constraints: {
 			video: {
 				facingMode: "environment",
-				width: { ideal: 1280, min: 720 },
-				height: { ideal: 720, min: 480 },
-				aspectRatio: 1.777778,
+				width: { ideal: 640, min: 480 }, // Reduced for low-res devices
+				height: { ideal: 480, min: 320 },
+				aspectRatio: 1.777777778, // 16:9 ratio
 			},
 		},
-
 		onDecodeResult(result) {
 			const scannedCode = result.getText().split(",")[1];
 
@@ -73,6 +73,16 @@ export default function PackageScanner() {
 		setResult(null);
 		setPackageStatus(null);
 		setError(null);
+	};
+
+	const toggleTorch = async () => {
+		try {
+			await torch.toggle();
+			setTorchEnabled(!torchEnabled);
+		} catch (error) {
+			console.error("Torch not supported:", error);
+			setError("Torch not supported on this device.");
+		}
 	};
 
 	const triggerFocus = async () => {
@@ -111,7 +121,7 @@ export default function PackageScanner() {
 			</CardHeader>
 			<CardContent>
 				{scanning ? (
-					<div className="aspect-square overflow-hidden mx-auto rounded-lg  relative border-gray-300 ">
+					<div className="aspect-square overflow-hidden mx-auto rounded-lg relative border-gray-300">
 						<video ref={ref} className="w-full h-full object-cover" onClick={triggerFocus} />
 						<div className="absolute p-4 inset-0 flex items-center justify-center pointer-events-none">
 							<div className="relative w-60 h-60">
@@ -168,7 +178,7 @@ export default function PackageScanner() {
 						</div>
 					</div>
 				) : (
-					<div className="aspect-square bg-muted   mx-auto flex items-center justify-center rounded-lg">
+					<div className="aspect-square bg-muted mx-auto flex items-center justify-center rounded-lg">
 						<QrCode className="w-16 h-16 text-muted-foreground" />
 					</div>
 				)}
@@ -188,7 +198,7 @@ export default function PackageScanner() {
 						</div>
 						<ul className="my-2">
 							{scannedPackages.map((pkg, index) => (
-								<li className=" border p-2 my-1 rounded-md" key={index}>
+								<li className="border p-2 my-1 rounded-md" key={index}>
 									{pkg}
 								</li>
 							))}
@@ -196,7 +206,10 @@ export default function PackageScanner() {
 					</div>
 				)}
 			</CardContent>
-			<CardFooter>
+			<CardFooter className="flex flex-col gap-2">
+				<Button onClick={toggleTorch} className="w-full">
+					{torchEnabled ? "Turn Off Flash" : "Turn On Flash"}
+				</Button>
 				<Button onClick={startScanning} className="w-full">
 					{scanning ? "Cancel Scan" : "Scan Package"}
 				</Button>
