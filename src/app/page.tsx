@@ -85,16 +85,18 @@ export default function PackageScanner() {
 						const capabilities = track.getCapabilities();
 						if ((capabilities as any).focusMode) {
 							await track.applyConstraints({
-								advanced: [{
-									focusMode: 'continuous'
-								} as any]
+								advanced: [
+									{
+										focusMode: "continuous",
+									} as any,
+								],
 							});
 						}
 					}
 				}
 			}
 		} catch (error) {
-			console.error('Error setting focus:', error);
+			console.error("Error setting focus:", error);
 		}
 	};
 
@@ -110,25 +112,59 @@ export default function PackageScanner() {
 			<CardContent>
 				{scanning ? (
 					<div className="relative">
-						<video ref={ref} className="w-full aspect-video rounded-lg" onClick={triggerFocus} />
+						<video
+							ref={ref}
+							className="w-full h-40  aspect-square rounded-lg"
+							onClick={triggerFocus}
+						/>
 						<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
 							<div className="relative w-64 h-24">
-								<div className={`absolute top-0 left-0 w-6 h-6 border-l-2 border-t-2 ${
-									error ? "border-red-500" : packageStatus ? "border-green-500" : "border-foreground"
-								}`}></div>
-								<div className={`absolute top-0 right-0 w-6 h-6 border-r-2 border-t-2 ${
-									error ? "border-red-500" : packageStatus ? "border-green-500" : "border-foreground"
-								}`}></div>
-								<div className={`absolute bottom-0 left-0 w-6 h-6 border-l-2 border-b-2 ${
-									error ? "border-red-500" : packageStatus ? "border-green-500" : "border-foreground"
-								}`}></div>
-								<div className={`absolute bottom-0 right-0 w-6 h-6 border-r-2 border-b-2 ${
-									error ? "border-red-500" : packageStatus ? "border-green-500" : "border-foreground"
-								}`}></div>
+								<div
+									className={`absolute top-0 left-0 w-6 h-6 border-l-2 border-t-2 ${
+										error
+											? "border-red-500"
+											: packageStatus
+											? "border-green-500"
+											: "border-foreground"
+									}`}
+								></div>
+								<div
+									className={`absolute top-0 right-0 w-6 h-6 border-r-2 border-t-2 ${
+										error
+											? "border-red-500"
+											: packageStatus
+											? "border-green-500"
+											: "border-foreground"
+									}`}
+								></div>
+								<div
+									className={`absolute bottom-0 left-0 w-6 h-6 border-l-2 border-b-2 ${
+										error
+											? "border-red-500"
+											: packageStatus
+											? "border-green-500"
+											: "border-foreground"
+									}`}
+								></div>
+								<div
+									className={`absolute bottom-0 right-0 w-6 h-6 border-r-2 border-b-2 ${
+										error
+											? "border-red-500"
+											: packageStatus
+											? "border-green-500"
+											: "border-foreground"
+									}`}
+								></div>
 								<div className="absolute inset-0 flex items-center justify-center">
-									<span className={`text-sm font-medium ${
-										error ? "text-red-500" : packageStatus ? "text-green-500" : "text-foreground/10"
-									} bg-black/10 px-2 py-1 rounded`}>
+									<span
+										className={`text-sm font-medium ${
+											error
+												? "text-red-500"
+												: packageStatus
+												? "text-green-500"
+												: "text-foreground/10"
+										} bg-black/10 px-2 py-1 rounded`}
+									>
 										{error ? "Error" : packageStatus ? "Found" : "Tap to focus"}
 									</span>
 								</div>
@@ -136,7 +172,7 @@ export default function PackageScanner() {
 						</div>
 					</div>
 				) : (
-					<div className="aspect-square bg-muted flex items-center justify-center rounded-lg">
+					<div className="aspect-square bg-muted h-40 w-full flex items-center justify-center rounded-lg">
 						<QrCode className="w-16 h-16 text-muted-foreground" />
 					</div>
 				)}
