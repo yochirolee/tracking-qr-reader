@@ -78,22 +78,23 @@ export default function PackageScanner() {
 	const triggerFocus = async () => {
 		try {
 			if (ref.current) {
-				const track = ref.current.srcObject?.getTracks()[0];
-				if (track) {
-					const capabilities = track.getCapabilities();
-					if (capabilities.focusMode?.includes("continuous")) {
-						await track.applyConstraints({
-							advanced: [
-								{
-									focusMode: "continuous",
-								},
-							],
-						});
+				const stream = ref.current.srcObject as MediaStream | null;
+				if (stream) {
+					const track = stream.getVideoTracks()[0];
+					if (track) {
+						const capabilities = track.getCapabilities();
+						if ((capabilities as any).focusMode) {
+							await track.applyConstraints({
+								advanced: [{
+									focusMode: 'continuous'
+								} as any]
+							});
+						}
 					}
 				}
 			}
 		} catch (error) {
-			console.error("Error setting focus:", error);
+			console.error('Error setting focus:', error);
 		}
 	};
 
