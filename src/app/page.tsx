@@ -126,10 +126,10 @@ export default function PackageScanner() {
 			</CardHeader>
 			<CardContent>
 				{scanning ? (
-					<div className="aspect-square overflow-hidden mx-auto rounded-lg relative border-gray-300">
+					<div className="aspect-square overflow-hidden h-48 mx-auto rounded-lg relative border-gray-300">
 						<video ref={ref} className="w-full h-full object-cover" onClick={triggerFocus} />
 						<div className="absolute p-4 inset-0 flex items-center justify-center pointer-events-none">
-							<div className="relative w-60 h-60">
+							<div className="relative  w-36 h-36">
 								<div
 									className={`absolute top-0 left-0 w-6 h-6 border-l-2 border-t-2 ${
 										error
