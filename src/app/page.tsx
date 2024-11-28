@@ -111,10 +111,26 @@ export default function PackageScanner() {
 				{scanning ? (
 					<div className="relative">
 						<video ref={ref} className="w-full aspect-video rounded-lg" onClick={triggerFocus} />
-						<div className="absolute inset-0 pointer-events-none">
-							<div className="w-48 h-48 border-2 border-white/50 rounded-lg absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+						<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+							<div className="relative w-64 h-24">
+								<div className={`absolute top-0 left-0 w-6 h-6 border-l-2 border-t-2 ${
+									error ? "border-red-500" : packageStatus ? "border-green-500" : "border-foreground"
+								}`}></div>
+								<div className={`absolute top-0 right-0 w-6 h-6 border-r-2 border-t-2 ${
+									error ? "border-red-500" : packageStatus ? "border-green-500" : "border-foreground"
+								}`}></div>
+								<div className={`absolute bottom-0 left-0 w-6 h-6 border-l-2 border-b-2 ${
+									error ? "border-red-500" : packageStatus ? "border-green-500" : "border-foreground"
+								}`}></div>
+								<div className={`absolute bottom-0 right-0 w-6 h-6 border-r-2 border-b-2 ${
+									error ? "border-red-500" : packageStatus ? "border-green-500" : "border-foreground"
+								}`}></div>
 								<div className="absolute inset-0 flex items-center justify-center">
-									<span className="text-xs text-white/75">Tap to focus</span>
+									<span className={`text-sm font-medium ${
+										error ? "text-red-500" : packageStatus ? "text-green-500" : "text-foreground/10"
+									} bg-black/10 px-2 py-1 rounded`}>
+										{error ? "Error" : packageStatus ? "Found" : "Tap to focus"}
+									</span>
 								</div>
 							</div>
 						</div>
