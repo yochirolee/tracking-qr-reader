@@ -77,7 +77,11 @@ export default function PackageScanner() {
 
 	const toggleTorch = async () => {
 		try {
-			await torch.toggle();
+			if (torchEnabled) {
+				await torch.off();
+			} else {
+				await torch.on();
+			}
 			setTorchEnabled(!torchEnabled);
 		} catch (error) {
 			console.error("Torch not supported:", error);
