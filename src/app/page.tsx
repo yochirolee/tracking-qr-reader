@@ -34,11 +34,12 @@ export default function PackageScanner() {
 		constraints: {
 			video: {
 				facingMode: "environment",
-				width: { ideal: 640, min: 480 }, // Reduced for low-res devices
-				height: { ideal: 480, min: 320 },
-				aspectRatio: 1.777777778, // 16:9 ratio
+				width: { ideal: 640, min: 360 },
+				height: { ideal: 480, min: 270 },
+				aspectRatio: 1.333333,
 			},
 		},
+		timeBetweenDecodingAttempts: 150,
 		onDecodeResult(result) {
 			const scannedCode = result.getText().split(",")[1];
 
