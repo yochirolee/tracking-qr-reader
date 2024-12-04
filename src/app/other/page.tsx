@@ -27,7 +27,7 @@ const QRScanner = () => {
 				{
 					highlightScanRegion: true,
 					highlightCodeOutline: true,
-					maxScansPerSecond: 1,
+					
 				},
 			);
 
