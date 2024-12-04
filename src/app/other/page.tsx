@@ -5,6 +5,7 @@ import QrScanner from "qr-scanner";
 const QRScanner = () => {
 	const videoRef = useRef(null);
 	const [qrCodeData, setQrCodeData] = useState<string[]>([]);
+	const successSound = new Audio("/success-beep.mp3");
 
 	useEffect(() => {
 		let qrScanner: QrScanner | null = null;
@@ -15,10 +16,12 @@ const QRScanner = () => {
 				(result) => {
 					console.log("Decoded QR code:", result.data);
 					setQrCodeData((prev) => [...prev, result.data]);
+					successSound.play();
 				},
 				{
 					highlightScanRegion: true,
 					highlightCodeOutline: true,
+					maxScansPerSecond: 1,
 				},
 			);
 
