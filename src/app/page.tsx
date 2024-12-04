@@ -37,12 +37,12 @@ export default function PackageScanner() {
 				width: { ideal: 1920, min: 640 },
 				height: { ideal: 1080, min: 480 },
 				aspectRatio: 1.777777778,
-				
 			},
 		},
 		timeBetweenDecodingAttempts: 200,
 		onDecodeResult(result) {
 			const scannedCode = result.getText().split(",")[1];
+			console.log(result.getBarcodeFormat());
 
 			if (scannedPackages.includes(scannedCode)) {
 				setError("Package already scanned!");
