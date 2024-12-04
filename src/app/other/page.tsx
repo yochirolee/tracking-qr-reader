@@ -5,7 +5,7 @@ import QrScanner from "qr-scanner";
 const QRScanner = () => {
 	const videoRef = useRef(null);
 	const [qrCodeData, setQrCodeData] = useState<string[]>([]);
-	const successSound = new Audio("/success-beep.mp3");
+	const successSound = new Audio("/success-beep.mp3") as HTMLAudioElement;
 
 	useEffect(() => {
 		let qrScanner: QrScanner | null = null;
