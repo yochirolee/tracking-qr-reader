@@ -5,34 +5,37 @@ import QrScanner from "qr-scanner";
 const QRScanner = () => {
 	const videoRef = useRef(null);
 	const [qrCodeData, setQrCodeData] = useState<string[]>([]);
-	const successSound = new Audio("/success-beep.mp3") as HTMLAudioElement;
+	const [successSound, setSuccessSound] = useState<HTMLAudioElement | null>(null);
+
+	useEffect(() => {
+		setSuccessSound(new Audio("/success-beep.mp3"));
+	}, []);
 
 	useEffect(() => {
 		let qrScanner: QrScanner | null = null;
 
 		if (videoRef.current) {
 			qrScanner = new QrScanner(
-				videoRef.current,
-				(result) => {
-					console.log("Decoded QR code:", result.data);
-					setQrCodeData((prev) => [...prev, result.data]);
-					successSound.play();
-				},
-				{
-					highlightScanRegion: true,
-					highlightCodeOutline: true,
-					maxScansPerSecond: 1,
-				},
+					videoRef.current,
+					(result) => {
+						console.log("Decoded QR code:", result.data);
+						setQrCodeData((prev) => [...prev, result.data]);
+						successSound?.play();
+					},
+					{
+						highlightScanRegion: true,
+						highlightCodeOutline: true,
+						maxScansPerSecond: 1,
+					},
 			);
 
 			qrScanner.start();
 
-			// Clean up when component unmounts
 			return () => {
 				qrScanner?.stop();
 			};
 		}
-	}, []);
+	}, [successSound]);
 
 	return (
 		<div>
