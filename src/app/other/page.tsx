@@ -18,16 +18,13 @@ const QRScanner = () => {
 			qrScanner = new QrScanner(
 				videoRef.current,
 				(result) => {
-					if (!qrCodeData.includes(result.data)) {
-						console.log("Decoded QR code:", result.data);
-						setQrCodeData((prev) => [...prev, result.data]);
-						successSound?.play();
-					}
+					console.log("Decoded QR code:", result.data);
+					setQrCodeData((prev) => [...prev, result.data]);
+					successSound?.play();
 				},
 				{
 					highlightScanRegion: true,
 					highlightCodeOutline: true,
-					
 				},
 			);
 
@@ -37,7 +34,7 @@ const QRScanner = () => {
 				qrScanner?.stop();
 			};
 		}
-	}, [successSound, qrCodeData]);
+	}, [successSound]);
 
 	return (
 		<div>
