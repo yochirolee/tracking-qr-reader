@@ -4,7 +4,7 @@ import QrScanner from "qr-scanner";
 
 const QRScanner = () => {
 	const videoRef = useRef(null);
-	const [qrCodeData, setQrCodeData] = useState("");
+	const [qrCodeData, setQrCodeData] = useState<string[]>([]);
 
 	useEffect(() => {
 		let qrScanner: QrScanner | null = null;
@@ -14,7 +14,7 @@ const QRScanner = () => {
 				videoRef.current,
 				(result) => {
 					console.log("Decoded QR code:", result.data);
-					setQrCodeData(result.data);
+					setQrCodeData((prev) => [...prev, result.data]);
 				},
 				{
 					highlightScanRegion: true,
@@ -34,7 +34,11 @@ const QRScanner = () => {
 	return (
 		<div>
 			<video ref={videoRef} style={{ width: "100%" }}></video>
-			<p>QR Code Data: {qrCodeData}</p>
+			{qrCodeData.map((data, index) => (
+				<p className="border p-2" key={index}>
+					QR Code Data: {data}
+				</p>
+			))}
 		</div>
 	);
 };
