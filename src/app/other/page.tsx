@@ -16,17 +16,16 @@ const QRScanner = () => {
 
 		if (videoRef.current) {
 			qrScanner = new QrScanner(
-					videoRef.current,
-					(result) => {
-						console.log("Decoded QR code:", result.data);
-						setQrCodeData((prev) => [...prev, result.data]);
-						successSound?.play();
-					},
-					{
-						highlightScanRegion: true,
-						highlightCodeOutline: true,
-						maxScansPerSecond: 1,
-					},
+				videoRef.current,
+				(result) => {
+					console.log("Decoded QR code:", result.data);
+					setQrCodeData((prev) => [...prev, result.data]);
+					successSound?.play();
+				},
+				{
+					highlightScanRegion: true,
+					highlightCodeOutline: true,
+				},
 			);
 
 			qrScanner.start();
